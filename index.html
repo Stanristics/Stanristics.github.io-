@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portfolio — AI Researcher</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@300;400;500&family=Crimson+Pro:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0a0e1a;
+    --navy-mid: #111827;
+    --navy-light: #1c2640;
+    --gold: #c9a84c;
+    --gold-light: #e2c47e;
+    --gold-pale: #f5e9c8;
+    --white: #f0ede6;
+    --muted: #8a8fa8;
+    --border: rgba(201, 168, 76, 0.18);
+    --border-strong: rgba(201, 168, 76, 0.35);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--navy);
+    color: var(--white);
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 300;
+    line-height: 1.8;
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1.2rem 4rem;
+    background: rgba(10, 14, 26, 0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 0.5px solid var(--border);
+  }
+
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    color: var(--gold);
+    letter-spacing: 0.05em;
+  }
+
+  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+
+  .nav-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    transition: color 0.3s;
+  }
+
+  .nav-links a:hover { color: var(--gold); }
+
+  /* ── HERO ── */
+  #hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 8rem 4rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-grid-bg {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(201, 168, 76, 0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(201, 168, 76, 0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+  }
+
+  .hero-glow {
+    position: absolute;
+    width: 600px; height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(201, 168, 76, 0.06) 0%, transparent 70%);
+    top: -100px; right: -100px;
+    pointer-events: none;
+  }
+
+  .hero-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.2s forwards;
+  }
+
+  .hero-name {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3rem, 7vw, 6rem);
+    font-weight: 700;
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    color: var(--white);
+    margin-bottom: 0.5rem;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.4s forwards;
+  }
+
+  .hero-name em {
+    font-style: italic;
+    color: var(--gold-light);
+  }
+
+  .hero-tagline {
+    font-family: 'Crimson Pro', serif;
+    font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+    font-style: italic;
+    color: var(--muted);
+    margin: 1.5rem 0 2.5rem;
+    max-width: 560px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.6s forwards;
+  }
+
+  .hero-bio {
+    font-size: 0.82rem;
+    color: var(--muted);
+    max-width: 520px;
+    line-height: 2;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.8s forwards;
+    margin-bottom: 3rem;
+  }
+
+  .hero-cta {
+    display: flex; gap: 1.2rem;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 1s forwards;
+  }
+
+  .btn-primary {
+    display: inline-block;
+    padding: 0.75rem 2rem;
+    background: var(--gold);
+    color: var(--navy);
+    text-decoration: none;
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    transition: background 0.3s, transform 0.2s;
+  }
+
+  .btn-primary:hover { background: var(--gold-light); transform: translateY(-2px); }
+
+  .btn-outline {
+    display: inline-block;
+    padding: 0.75rem 2rem;
+    border: 0.5px solid var(--border-strong);
+    color: var(--gold);
+    text-decoration: none;
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    transition: border-color 0.3s, color 0.3s, transform 0.2s;
+  }
+
+  .btn-outline:hover { border-color: var(--gold); color: var(--gold-light); transform: translateY(-2px); }
+
+  .hero-scroll {
+    position: absolute; bottom: 2.5rem; left: 4rem;
+    display: flex; align-items: center; gap: 1rem;
+    color: var(--muted);
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 1.2s forwards;
+  }
+
+  .scroll-line {
+    width: 40px; height: 0.5px;
+    background: var(--border-strong);
+    animation: expandLine 1.5s ease 1.5s both;
+  }
+
+  @keyframes expandLine { from { width: 0; } to { width: 40px; } }
+
+  /* ── SECTIONS ── */
+  section { padding: 7rem 4rem; }
+
+  .section-label {
+    font-size: 0.68rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1rem;
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 1rem;
+    line-height: 1.1;
+  }
+
+  .section-rule {
+    width: 60px; height: 1px;
+    background: var(--gold);
+    margin-bottom: 3.5rem;
+  }
+
+  /* ── PROJECTS ── */
+  #projects { background: var(--navy-mid); }
+
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 500px), 1fr));
+    gap: 2px;
+  }
+
+  .project-card {
+    background: var(--navy-light);
+    border: 0.5px solid var(--border);
+    padding: 3rem;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.4s, transform 0.3s;
+    cursor: default;
+  }
+
+  .project-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px; height: 0;
+    background: var(--gold);
+    transition: height 0.4s ease;
+  }
+
+  .project-card:hover::before { height: 100%; }
+  .project-card:hover { border-color: var(--border-strong); }
+
+  .project-num {
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    margin-bottom: 1.8rem;
+    opacity: 0.7;
+  }
+
+  .project-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 0.5rem;
+    line-height: 1.25;
+  }
+
+  .project-collab {
+    font-size: 0.72rem;
+    color: var(--gold);
+    margin-bottom: 1.5rem;
+    letter-spacing: 0.05em;
+  }
+
+  .project-desc {
+    font-family: 'Crimson Pro', serif;
+    font-size: 1rem;
+    color: var(--muted);
+    line-height: 1.9;
+    margin-bottom: 2rem;
+    font-weight: 300;
+  }
+
+  .project-tags {
+    display: flex; flex-wrap: wrap; gap: 0.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .tag {
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.3rem 0.75rem;
+    border: 0.5px solid var(--border-strong);
+    color: var(--gold);
+    background: rgba(201, 168, 76, 0.05);
+  }
+
+  .project-highlights {
+    list-style: none;
+    border-top: 0.5px solid var(--border);
+    padding-top: 1.5rem;
+  }
+
+  .project-highlights li {
+    font-size: 0.76rem;
+    color: var(--muted);
+    padding: 0.35rem 0;
+    padding-left: 1rem;
+    position: relative;
+    line-height: 1.6;
+  }
+
+  .project-highlights li::before {
+    content: '→';
+    position: absolute; left: 0;
+    color: var(--gold);
+    font-size: 0.65rem;
+  }
+
+  /* ── SKILLS ── */
+  #skills { border-top: 0.5px solid var(--border); }
+
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .skill-group {
+    border: 0.5px solid var(--border);
+    padding: 1.8rem;
+    background: var(--navy-light);
+  }
+
+  .skill-group-title {
+    font-size: 0.68rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.2rem;
+    padding-bottom: 0.8rem;
+    border-bottom: 0.5px solid var(--border);
+  }
+
+  .skill-list { list-style: none; }
+
+  .skill-list li {
+    font-size: 0.78rem;
+    color: var(--muted);
+    padding: 0.3rem 0;
+    display: flex; align-items: center; gap: 0.6rem;
+  }
+
+  .skill-dot {
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: var(--gold);
+    flex-shrink: 0;
+  }
+
+  /* ── ABOUT ── */
+  #about {
+    background: var(--navy-mid);
+    border-top: 0.5px solid var(--border);
+  }
+
+  .about-layout {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 5rem;
+    align-items: start;
+  }
+
+  .about-aside { }
+
+  .about-initials {
+    width: 100px; height: 100px;
+    border: 0.5px solid var(--border-strong);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    color: var(--gold);
+    margin-bottom: 2rem;
+  }
+
+  .about-meta { list-style: none; }
+
+  .about-meta li {
+    font-size: 0.72rem;
+    color: var(--muted);
+    padding: 0.6rem 0;
+    border-bottom: 0.5px solid var(--border);
+    display: flex; flex-direction: column; gap: 0.2rem;
+  }
+
+  .about-meta-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold);
+    opacity: 0.8;
+  }
+
+  .about-text p {
+    font-family: 'Crimson Pro', serif;
+    font-size: 1.1rem;
+    color: var(--muted);
+    line-height: 2;
+    margin-bottom: 1.5rem;
+  }
+
+  .about-text p strong {
+    color: var(--white);
+    font-weight: 400;
+  }
+
+  /* ── CONTACT ── */
+  #contact { border-top: 0.5px solid var(--border); }
+
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: start;
+  }
+
+  .contact-intro {
+    font-family: 'Crimson Pro', serif;
+    font-size: 1.05rem;
+    color: var(--muted);
+    line-height: 2;
+    margin-bottom: 2rem;
+  }
+
+  .contact-links { display: flex; flex-direction: column; gap: 1rem; }
+
+  .contact-link {
+    display: flex; align-items: center; gap: 1rem;
+    text-decoration: none;
+    color: var(--muted);
+    font-size: 0.78rem;
+    letter-spacing: 0.05em;
+    padding: 1rem 1.2rem;
+    border: 0.5px solid var(--border);
+    transition: border-color 0.3s, color 0.3s, background 0.3s;
+  }
+
+  .contact-link:hover {
+    border-color: var(--border-strong);
+    color: var(--gold);
+    background: rgba(201, 168, 76, 0.04);
+  }
+
+  .contact-link-icon {
+    color: var(--gold);
+    font-size: 0.85rem;
+    min-width: 16px;
+    text-align: center;
+  }
+
+  .contact-availability {
+    border: 0.5px solid var(--border);
+    padding: 2.5rem;
+    background: var(--navy-light);
+  }
+
+  .avail-dot {
+    display: inline-block;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: #3ecf5f;
+    margin-right: 0.5rem;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  .avail-status {
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #3ecf5f;
+    margin-bottom: 1.5rem;
+  }
+
+  .avail-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    color: var(--white);
+    margin-bottom: 1rem;
+    line-height: 1.3;
+  }
+
+  .avail-desc {
+    font-size: 0.78rem;
+    color: var(--muted);
+    line-height: 1.9;
+    margin-bottom: 2rem;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 0.5px solid var(--border);
+    padding: 2rem 4rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--navy);
+  }
+
+  .footer-copy {
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    opacity: 0.6;
+  }
+
+  .footer-brand {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.85rem;
+    color: var(--gold);
+    opacity: 0.7;
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { gap: 1.5rem; }
+    #hero, section { padding-left: 1.5rem; padding-right: 1.5rem; }
+    .hero-scroll { left: 1.5rem; }
+    footer { padding: 1.5rem; flex-direction: column; gap: 0.5rem; text-align: center; }
+    .about-layout, .contact-grid { grid-template-columns: 1fr; gap: 2rem; }
+    .project-card { padding: 2rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Stanley Okoro · Portfolio</div>
+  <ul class="nav-links">
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-grid-bg"></div>
+  <div class="hero-glow"></div>
+
+  <div class="hero-label">Data Scientist · NLP · Statistical Modelling · LMU Munich</div>
+
+  <h1 class="hero-name">
+    Stanley<br><em>Okoro</em>
+  </h1>
+
+  <p class="hero-tagline">Turning unstructured chaos into structured insight — one model at a time.</p>
+
+  <p class="hero-bio">
+    Masters student in Statistics & Data Science at Ludwig Maximilian University Munich. I build data-driven systems at the intersection of machine learning, NLP, and real-world complexity — from conflict data extraction pipelines to linguistic AI research on underrepresented African languages. Previously in financial services and logistics data roles across Nigeria and Germany.
+  </p>
+
+  <div class="hero-cta">
+    <a href="#projects" class="btn-primary">View Projects</a>
+    <a href="#contact" class="btn-outline">Get in Touch</a>
+  </div>
+
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    Scroll to explore
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="reveal">
+    <div class="section-label">Selected Work</div>
+    <h2 class="section-title">Research Projects</h2>
+    <div class="section-rule"></div>
+  </div>
+
+  <div class="projects-grid">
+
+    <!-- Project 01 -->
+    <div class="project-card reveal">
+      <div class="project-num">Project — 01 / 2024</div>
+      <h3 class="project-title">Automated Data Collection of Rebel Weapon Endowments</h3>
+      <div class="project-collab">w/ Harihara Viaish Ramaiah Sakthivel · LMU Munich, Political Science Dept.</div>
+      <p class="project-desc">
+        A consulting system leveraging LLMs to automate the extraction and structuring of complex weapons data from vast, unstructured sources — conflict reports, news articles, field dispatches. Handles mixed data types while performing deep contextual reasoning to distinguish implicit details like "captured" vs. "purchased" weapons across multilingual corpora.
+      </p>
+      <div class="project-tags">
+        <span class="tag">LLMs</span>
+        <span class="tag">Python</span>
+        <span class="tag">NLP Pipelines</span>
+        <span class="tag">Data Engineering</span>
+        <span class="tag">Political Science</span>
+        <span class="tag">Conflict Research</span>
+      </div>
+      <ul class="project-highlights">
+        <li>Mixed data extraction: numeric (weapon counts), ordinal, and string (supplier names)</li>
+        <li>Contextual reasoning across "captured" vs. "purchased" weapon semantics</li>
+        <li>Multilingual document processing at terabyte scale</li>
+        <li>Presented at Ludwig Maximilian University Munich</li>
+      </ul>
+    </div>
+
+    <!-- Project 02 -->
+    <div class="project-card reveal">
+      <div class="project-num">Project — 02 / 2024</div>
+      <h3 class="project-title">AHAMEFULA</h3>
+      <div class="project-collab">Seminar Research · Computational Linguistics</div>
+      <p class="project-desc">
+        A seminar paper analyzing the capability of large language models to understand the underlying structural patterns of low-context languages, using Igbo as a primary case study. Explores how BERT and similar architectures can bridge representation gaps for linguistically rich but underrepresented languages — with implications for cultural preservation and multilingual AI equity.
+      </p>
+      <div class="project-tags">
+        <span class="tag">BERT</span>
+        <span class="tag">Python</span>
+        <span class="tag">NLP</span>
+        <span class="tag">Linguistic Analysis</span>
+        <span class="tag">Igbo Language</span>
+        <span class="tag">Language Preservation</span>
+      </div>
+      <ul class="project-highlights">
+        <li>Analyzed LLM capability gaps in low-context, underrepresented languages</li>
+        <li>Case study: Igbo — a rich, explicitly structured African language</li>
+        <li>Applications in cultural heritage and multilingual AI fairness</li>
+        <li>Presented to academic audience; co-authored with research team</li>
+      </ul>
+    </div>
+
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="reveal">
+    <div class="section-label">Technical Expertise</div>
+    <h2 class="section-title">Skills & Tools</h2>
+    <div class="section-rule"></div>
+  </div>
+
+  <div class="skills-grid reveal">
+    <div class="skill-group">
+      <div class="skill-group-title">AI & Machine Learning</div>
+      <ul class="skill-list">
+        <li><span class="skill-dot"></span>Large Language Models (LLMs)</li>
+        <li><span class="skill-dot"></span>BERT & Transformer Architectures</li>
+        <li><span class="skill-dot"></span>Prompt Engineering</li>
+        <li><span class="skill-dot"></span>Fine-tuning & Evaluation</li>
+        <li><span class="skill-dot"></span>Retrieval-Augmented Generation</li>
+      </ul>
+    </div>
+    <div class="skill-group">
+      <div class="skill-group-title">NLP & Linguistics</div>
+      <ul class="skill-list">
+        <li><span class="skill-dot"></span>Information Extraction</li>
+        <li><span class="skill-dot"></span>Named Entity Recognition</span></li>
+        <li><span class="skill-dot"></span>Multilingual Processing</li>
+        <li><span class="skill-dot"></span>Low-Resource Languages</li>
+        <li><span class="skill-dot"></span>Computational Linguistics</li>
+      </ul>
+    </div>
+    <div class="skill-group">
+      <div class="skill-group-title">Data Engineering</div>
+      <ul class="skill-list">
+        <li><span class="skill-dot"></span>Python (pandas, spaCy, HuggingFace)</li>
+        <li><span class="skill-dot"></span>Large-scale document processing</li>
+        <li><span class="skill-dot"></span>Data structuring pipelines</li>
+        <li><span class="skill-dot"></span>Unstructured text parsing</li>
+        <li><span class="skill-dot"></span>Research data management</li>
+      </ul>
+    </div>
+    <div class="skill-group">
+      <div class="skill-group-title">Research & Domain</div>
+      <ul class="skill-list">
+        <li><span class="skill-dot"></span>Conflict & Political Science Research</li>
+        <li><span class="skill-dot"></span>African Languages & Linguistics</li>
+        <li><span class="skill-dot"></span>Academic writing & presentation</li>
+        <li><span class="skill-dot"></span>Consulting & stakeholder work</li>
+        <li><span class="skill-dot"></span>Cross-disciplinary collaboration</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-layout">
+    <div class="about-aside reveal">
+      <div class="about-initials">SO</div>
+      <ul class="about-meta">
+        <li>
+          <span class="about-meta-label">Location</span>
+          Munich, Bavaria, Germany
+        </li>
+        <li>
+          <span class="about-meta-label">Education</span>
+          M.Sc. Statistics & Data Science · LMU Munich
+        </li>
+        <li>
+          <span class="about-meta-label">Focus Areas</span>
+          LLMs · NLP · Machine Learning · Predictive Modelling
+        </li>
+        <li>
+          <span class="about-meta-label">Tools</span>
+          Python · R · SQL · Tableau · HuggingFace
+        </li>
+        <li>
+          <span class="about-meta-label">Background</span>
+          Statistics (B.Sc.) · Imo State University, Nigeria
+        </li>
+      </ul>
+    </div>
+    <div class="about-text reveal">
+      <div class="section-label">About Me</div>
+      <h2 class="section-title">Statistician.<br>Data Scientist.<br>Explorer.</h2>
+      <div class="section-rule"></div>
+      <p>
+        I'm a Graduate Statistician and Data Scientist with hands-on experience across financial services, logistics, and academic research. My foundation is in <strong>machine learning, data analysis, and predictive modelling</strong> — and I'm passionate about using data to solve problems that actually matter.
+      </p>
+      <p>
+        My research work with the <strong>Political Science Department at LMU Munich</strong> pushed me to build NLP systems that reason about context at scale — teaching models to extract and classify weapons data from multilingual conflict reports. My AHAMEFULA project goes further, exploring how BERT handles the structural richness of <strong>Igbo</strong>, a linguistically complex but underrepresented language.
+      </p>
+      <p>
+        From predicting customer churn at <strong>FINCA Microfinance Bank</strong> in Nigeria, to optimising inventory pipelines at <strong>Getir</strong> in Munich — I bring a rare combination of field experience and cutting-edge research skills to every problem.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="reveal">
+    <div class="section-label">Get in Touch</div>
+    <h2 class="section-title">Let's Collaborate</h2>
+    <div class="section-rule"></div>
+  </div>
+
+  <div class="contact-grid">
+    <div class="reveal">
+      <p class="contact-intro">
+        I'm open to research collaborations, consulting projects, and conversations about AI, NLP, conflict data, and linguistic diversity. Reach out — I read everything.
+      </p>
+      <div class="contact-links">
+        <a href="/cdn-cgi/l/email-protection#326146535c5e574b515a4759454702020372555f535b5e1c515d5f" class="contact-link">
+          <span class="contact-link-icon">✉</span>
+          <span class="__cf_email__" data-cfemail="94c7e0f5faf8f1edf7fce1ffe3e1a4a4a5d4f3f9f5fdf8baf7fbf9">[email&#160;protected]</span>
+        </a>
+        <a href="https://www.linkedin.com/in/stanleyokoro-494073195" class="contact-link" target="_blank">
+          <span class="contact-link-icon">in</span>
+          linkedin.com/in/stanleyokoro-494073195
+        </a>
+        <a href="https://github.com/Stanristics" class="contact-link" target="_blank">
+          <span class="contact-link-icon">gh</span>
+          github.com/Stanristics
+        </a>
+      </div>
+    </div>
+
+    <div class="contact-availability reveal">
+      <div class="avail-status"><span class="avail-dot"></span>Available for Opportunities</div>
+      <div class="avail-title">Open to Research &amp; Consulting Projects</div>
+      <p class="avail-desc">
+        Currently based in Munich. Open to academic collaborations, AI consulting engagements, and full-time research positions in NLP, computational social science, or multilingual AI. Remote-friendly.
+      </p>
+      <a href="/cdn-cgi/l/email-protection#37644356595b524e545f425c404207070677505a565e5b1954585a" class="btn-primary" style="display: inline-block;">Start a Conversation</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-copy">© 2025 · Stanley Okoro · Munich, Germany</div>
+  <div class="footer-brand">Stanley Okoro · Portfolio</div>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloud
